@@ -62,7 +62,7 @@ menu() {
       echo '              重启docker'
       echo '-------------------------------------------------------------'
       systemctl daemon-reload
-      systemctl restart docker.service
+      sudo service docker restart
       docker -v
 
     fi
