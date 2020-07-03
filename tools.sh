@@ -63,6 +63,7 @@ menu() {
       echo '-------------------------------------------------------------'
       systemctl daemon-reload
       sudo service docker restart
+      systemctl enable docker.service
       docker -v
 
     fi
