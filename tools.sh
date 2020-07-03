@@ -11,7 +11,7 @@ menu() {
   echo "(3) 安装Bt"
   echo "(4) 安装redis集群"
   echo "(5) 安装ruby"
-  echo "(6) Check java...."
+  echo "(6) Docker安装单机Redis"
 
   echo "(9) Exit Menu"
   echo "================================"
@@ -61,12 +61,9 @@ menu() {
       echo '-------------------------------------------------------------'
       echo '              重启docker'
       echo '-------------------------------------------------------------'
-      docker_str= 'systemctl  start docker.service && systemctl  enable docker.service'
-
-      echo '-------------------------------------------------------------'
-      echo '              docker软连接'
-      echo '-------------------------------------------------------------'
-      echo $docker_str
+      systemctl daemon-reload
+      systemctl restart docker.service
+      docker -v
 
     fi
 
@@ -196,6 +193,7 @@ EOF
       # 通过locate或find命令查找 `redis-trib.rb`文件位置，
       rvm install 2.5.1
       rvm use 2.5.1 --default
+      source /usr/local/rvm/scripts/rvm
       gem uninstall redis
       gem install redis
       yum install -y rubygems
@@ -208,7 +206,7 @@ EOF
     menu
     ;;
   6)
-    echo check java .......
+    echo "Docker安装单机Redis"
     sleep 1
     ps aux | grep java
 
