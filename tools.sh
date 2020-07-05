@@ -124,7 +124,8 @@ menu() {
     mv redis-5.0.9 /usr/local/redis
     cd /usr/local/redis/
     echo '试图卸载'
-    xargs rm <install_manifest.txt
+    make uninstall
+    echo ''
     echo '试图编译安装'
     make && make install
     sleep 1
@@ -156,23 +157,12 @@ menu() {
       # 在 /home 目录下创建redis-cluster 文件夹
       mkdir -p /home/redis-cluster
       cd /home/redis-cluster
-      # 清空 redis-cluster.conf文件中
-      cat /dev/null >redis-cluster.conf
-      # 把下列信息写入redis-cluster.conf文件中
+      rm -f redis-cluster.tmpl
+      cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
 
-      cat >redis-cluster.conf <<EOF
-            port ${PORT}
-            cluster-enabled yes
-            cluster-config-file nodes.conf
-            cluster-node-timeout 5000
-            appendonly yes
-EOF
-
-      # 在 /home/redis-cluster 目录下生成conf和data目录，并生成配置文件
       for port in $(seq 6380 6385); do
-        mkdir -p ./${port}/conf && PORT=${port} envsubst <./redis-cluster.conf >./${port}/conf/redis.conf && mkdir -p ./${port}/data
+        mkdir -p ./${port}/conf && PORT=${port} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf && mkdir -p ./${port}/data
       done
-      # tree命令查看目录(如果命令不存在，执行安装命令：yum -y install tree)
       tree
 
       # 创建6个redis容器
@@ -196,7 +186,7 @@ EOF
       echo "当前节点:"
       echo $myiplist
       sudo ruby /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
-     # sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
+      # sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
     fi
     menu
     ;;
