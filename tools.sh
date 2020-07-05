@@ -212,10 +212,13 @@ EOF
     echo "重置Docker的Web管理器:"
     #    sudo docker run -it --restart=always -d -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
     docker rm -f liuqin-dockerui
+    echo '请不要慌'
     docker run -d -p 5999:9000 -m 300M --name liuqin-dockerui --restart=always -v /var/run/docker.sock:/var/run/docker.sock abh1nav/dockerui:latest
     echo '5999 开启了dockerui 服务'
     sleep 1
     read -s -n1 -p "是否重装Redis(y/n)? ... "
+    echo $REPLY
+    sleep 1
     if [ $REPLY == "y" ]; then
 
       read -p "port:" port
@@ -236,6 +239,7 @@ EOF
         echo $password
       fi
       docker rm -f liuqin-redis
+      echo '请不要慌'
       if [ ! -n "$password" ]; then
         docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis
         echo $port'开启了单机redis服务'
@@ -248,8 +252,11 @@ EOF
     sleep 1
 
     read -s -n1 -p "是否重装Minio(y/n)? ... "
+    echo $REPLY
+    sleep 1
     if [ $REPLY == "y" ]; then
       docker rm -f liuqin-minio
+      echo '请不要慌'
       read -p "minioport:" minioport
       echo 'minioport:' $minioport
       if [ ! -n "$minioport" ]; then
