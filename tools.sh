@@ -220,7 +220,7 @@ menu() {
     sleep 1
     echo '如果下面命令失败，手动执行:'
     echo ' redis-trib.rb create --replicas 1 ' $myiplist
-    sudo redis-trib.rb create --replicas 1 $(echo $myiplist)
+    redis-trib.rb create --replicas 1 $(echo $myiplist)
     menu
     ;;
   5)
