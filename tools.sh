@@ -209,7 +209,54 @@ EOF
   6)
     echo "Docker安装单机Redis"
     sleep 1
-    ps aux | grep java
+
+    read -s -n1 -p "是否重装Redis(y/n)? ... "
+    if [ $REPLY == "y" ]; then
+
+      read -p "port:" port
+      echo 'port:' $port
+      if [ ! -n "$port" ]; then
+        echo "使用默认端口6380"
+        port=6380
+        echo $port
+      else
+        echo $port
+      fi
+
+      read -p "password:" password
+      echo 'password:' $password
+      if [ ! -n "$password" ]; then
+        echo "使用空密码"
+      else
+        echo $password
+      fi
+      docker rm -f liuqin-redis
+      if [ ! -n "$password" ]; then
+        docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis
+      else
+        docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis --requirepass "a123456"
+      fi
+    fi
+
+    sleep 1
+
+    read -s -n1 -p "是否重装Minio(y/n)? ... "
+    if [ $REPLY == "y" ]; then
+      docker rm -f liuqin-minio
+      read -p "minioport:" minioport
+      echo 'minioport:' $minioport
+      if [ ! -n "$minioport" ]; then
+        echo "使用默认端口8742"
+        minioport=8742
+        echo $minioport
+      else
+        echo $minioport
+      fi
+      sudo rm -rf /minio/data
+      sudo mkdir -p /minio/data
+      sudo mkdir -p /minio/config
+      docker run -d -p $minioport:9000 --restart=always --name liuqin-minio -e "MINIO_ACCESS_KEY=liuqin" -e "MINIO_SECRET_KEY=liuqin0111" -v /minio/data:/data -v /minio/config:/root/.minio minio/minio server /data
+    fi
 
     menu
     ;;
