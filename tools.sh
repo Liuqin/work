@@ -221,6 +221,11 @@ menu() {
     echo '如果下面命令失败，手动执行:'
     echo ' redis-trib.rb create --replicas 1 ' $myiplist
     redis-trib.rb create --replicas 1 $(echo $myiplist)
+
+    sleep 1
+    echo '常用检查修复节点命令：'
+    echo 'redis-trib.rb fix 127.0.0.1:6383'
+    echo 'redis-trib.rb check 127.0.0.1:6383'
     menu
     ;;
   5)
