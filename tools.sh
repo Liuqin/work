@@ -164,12 +164,12 @@ menu() {
       done
       tree
 
-      docker network rm liuqin-redis-net
-      docker network create liuqin-redis-net
+#      docker network rm liuqin-redis-net
+#      docker network create liuqin-redis-net
 
       # 创建6个redis容器
       for port in $(seq 6380 6385); do
-        docker run -d  --net=liuqin-redis-net  --name=redis-${port}  --restart=always  -v $(pwd)/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -d redis:latest redis-server /usr/local/etc/redis/redis.conf
+        docker run -d  --net=host  --name=redis-${port}  --restart=always  -v $(pwd)/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -d redis:latest redis-server /usr/local/etc/redis/redis.conf
       done
       echo '-------------------------------------------------------------'
       echo '              启动  redis 集群'
