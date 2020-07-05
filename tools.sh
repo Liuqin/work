@@ -109,6 +109,15 @@ menu() {
     # echo 安装redis 集群
     sleep 1
     read -s -n1 -p "安装redis 集群(y/n)? ... "
+    yum -y install gcc
+    yum -y install libc
+    wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
+    tar -zxvf redis-5.0.9.tar.gz
+    mv redis-5.0.9 /usr/local/redis
+    cd /usr/local/redis/
+    make && make install
+    sleep 1
+    cd /work
     if [ $REPLY == "y" ]; then
 
       echo '-------------------------------------------------------------'
