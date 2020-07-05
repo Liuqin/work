@@ -111,10 +111,21 @@ menu() {
     read -s -n1 -p "安装redis 集群(y/n)? ... "
     yum -y install gcc
     yum -y install libc
-    wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
+    if [ -f "/work/redis-5.0.9.tar.gz" ]; then
+      echo "文件存在"
+    else
+      echo "文件不存在"
+        wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
+        sleep 1
+        echo 'redis-5.0.9.tar.gz 下载完成'
+    fi
+
     tar -zxvf redis-5.0.9.tar.gz
     mv redis-5.0.9 /usr/local/redis
     cd /usr/local/redis/
+    echo '试图卸载'
+    xargs rm < install_manifest.txt
+    echo '试图编译安装'
     make && make install
     sleep 1
     cd /work
