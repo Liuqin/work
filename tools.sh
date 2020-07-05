@@ -11,7 +11,7 @@ menu() {
   echo "(3) 安装Bt"
   echo "(4) 安装redis集群"
   echo "(5) 安装ruby"
-  echo "(6) Docker安装单机Redis"
+  echo "(6) 部分单机服务"
 
   echo "(9) Exit Menu"
   echo "================================"
@@ -207,7 +207,7 @@ EOF
     menu
     ;;
   6)
-    echo "Docker安装单机Redis"
+    echo "部分单机服务"
     sleep 1
     echo "重置Docker的Web管理器:"
     #    sudo docker run -it --restart=always -d -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
