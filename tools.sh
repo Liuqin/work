@@ -209,7 +209,12 @@ EOF
   6)
     echo "Docker安装单机Redis"
     sleep 1
-
+    echo "重置Docker的Web管理器:"
+    #    sudo docker run -it --restart=always -d -p 3307:3306 --name mysql -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7
+    docker rm -f liuqin-dockerui
+    docker run -d -p 5999:9000 -m 300M --name liuqin-dockerui --restart=always -v /var/run/docker.sock:/var/run/docker.sock abh1nav/dockerui:latest
+    echo '5999 开启了dockerui 服务'
+    sleep 1
     read -s -n1 -p "是否重装Redis(y/n)? ... "
     if [ $REPLY == "y" ]; then
 
