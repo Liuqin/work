@@ -184,7 +184,7 @@ EOF
       done
       echo "当前节点:"
       echo $myiplist
-      ruby $(echo $rb) create --replicas 1 $(echo ${myiplist})
+      ruby /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
     fi
     menu
     ;;
