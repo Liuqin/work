@@ -247,6 +247,8 @@ EOF
         docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis --requirepass $password
         echo $port'开启了单机redis服务'
       fi
+      sleep 1
+      echo 'completed!'
     fi
 
     sleep 1
@@ -271,6 +273,9 @@ EOF
       sudo mkdir -p /minio/config
       docker run -d -p $minioport:9000 --restart=always --name liuqin-minio -e "MINIO_ACCESS_KEY=liuqin" -e "MINIO_SECRET_KEY=liuqin0111" -v /minio/data:/data -v /minio/config:/root/.minio minio/minio server /data
       echo $minioport'开启了minio 服务'
+      echo 'MINIO_ACCESS_KEY:liuqin'
+      echo 'MINIO_SECRET_KEY:liuqin0111'
+      echo 'completed!'
     fi
 
     menu
