@@ -184,6 +184,16 @@ menu() {
       done
       echo "当前节点:"
       echo $myiplist
+      echo '等待服务启动'
+      sleep 1
+      echo '等待服务启动'
+      sleep 1
+      echo '等待服务启动'
+      sleep 1
+      echo '等待服务启动'
+      sleep 1
+      echo '等待服务启动'
+      sleep 1
       sudo ruby /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
       # sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
     fi
