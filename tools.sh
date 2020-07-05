@@ -164,12 +164,13 @@ menu() {
       done
       tree
 
-#      docker network rm liuqin-redis-net
-#      docker network create liuqin-redis-net
+      #      docker network rm liuqin-redis-net
+      #      docker network create liuqin-redis-net
 
       # 创建6个redis容器
       for port in $(seq 6380 6385); do
-        docker run -d  --net=host  --name=redis-${port}  --restart=always  -v $(pwd)/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -d redis:latest redis-server /etc/redis.conf
+        docker run -d --net=host --name=redis-${port} --restart=always -v $(pwd)/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf
+        -d redis:latest redis-server /usr/local/etc/redis/redis.conf
       done
       echo '-------------------------------------------------------------'
       echo '              启动  redis 集群'
@@ -196,8 +197,9 @@ menu() {
       echo '等待服务启动'
       sleep 1
       echo '等待服务启动'
+      ln -s /usr/local/redis/src/redis-trib.rb /usr/bin/redis-trib.rb
       sleep 1
-      sudo  /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
+      sudo redis-trib.rb create --replicas 1 $(echo ${myiplist})
       # sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
     fi
     menu
