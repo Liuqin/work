@@ -111,7 +111,7 @@ menu() {
     read -s -n1 -p "安装redis 集群(y/n)? ... "
     yum -y install gcc
     yum -y install libc
-    if [ -f "/work/redis-5.0.9.tar.gz" ]; then
+    if [ -f "/work/redis-3.2.0.tar.gz" ]; then
       echo "文件存在"
     else
       echo "文件不存在"
