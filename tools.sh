@@ -171,8 +171,9 @@ menu() {
     rm -f redis-cluster.tmpl
     cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
 
-    node_var =date +%N | md5sum | cut -c 1-8
+    node_var=$(date +%N | md5sum | cut -c 1-8)
     echo $node_var
+    echo '---------------------------'
     for port in $(seq 6381 6386); do
       echo $node_var
       mkdir -p ./${port}/conf &&
