@@ -108,7 +108,8 @@ menu() {
   4)
     # echo 安装redis 集群
     sleep 1
-    read -p "内网地址:" local_ip
+     yum install gawk -y
+    read -p "内网地址,默认127.0.0.1:" local_ip
     echo 'local_ip:' $local_ip
     echo '内网地址:'$local_ip
     if [ ! -n "$local_ip" ]; then
@@ -151,6 +152,7 @@ menu() {
 
     # 在 /home 目录下创建redis-cluster 文件夹
     rm -rf /home/redis-cluster
+    rm -rf /home/redis-cluster/
     docker rm -f redis-6381
     docker rm -f redis-6382
     docker rm -f redis-6383
@@ -168,15 +170,18 @@ menu() {
     cd /home/redis-cluster
     rm -f redis-cluster.tmpl
     cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
+
     for port in $(seq 6381 6386); do
-      mkdir -p ./${port}/conf &&
+
+        kill -9 $(netstat -nlp | grep :1${port} | awk '{print $7}' | awk -F"/" '{ print $1 }')
+        mkdir -p ./${port}/conf &&
         PORT=${port} ip=${local_ip} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
         mkdir -p ./${port}/data
     done
     tree
     # 创建6个redis容器
     for port in $(seq 6381 6386); do
-      docker run -d -ti --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
+      docker run -d -it --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
     done
     echo '-------------------------------------------------------------'
     echo '              启动  redis 集群'
@@ -204,14 +209,18 @@ menu() {
     echo '等待服务启动'
     sleep 1
     echo '等待服务启动'
-    ln -s /usr/local/redis/src/redis-trib.rb /usr/bin/redis-trib.rb
-    sleep 1
+    if [ -f "/usr/bin/redis-trib.rb" ]; then
+      echo "存在命令"
+    else
+      ln -s /usr/local/redis/src/redis-trib.rb /usr/bin/redis-trib.rb
+    fi
 
+    sleep 1
+    sleep 1
     sleep 1
     echo '如果下面命令失败，手动执行:'
     echo ' redis-trib.rb create --replicas 1 ' $myiplist
-    redis-trib.rb create --replicas 1 $(echo $myiplist)
-
+    sudo redis-trib.rb create --replicas 1 $(echo $myiplist)
     menu
     ;;
   5)
