@@ -175,7 +175,7 @@ menu() {
     echo $node
     for port in $(seq 6381 6386); do
       mkdir -p ./${port}/conf &&
-        PORT=${port} ip=${local_ip} ${nodes}=$node  envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
+        PORT=${port} ip=${local_ip} nodes=${node}  envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
         mkdir -p ./${port}/data
     done
     tree
