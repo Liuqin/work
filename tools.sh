@@ -171,9 +171,11 @@ menu() {
     rm -f redis-cluster.tmpl
     cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
 
+    node=date +%N | md5sum | cut -c 1-8
+    echo $node
     for port in $(seq 6381 6386); do
       mkdir -p ./${port}/conf &&
-        PORT=${port} ip=${local_ip} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
+        PORT=${port} ip=${local_ip} ${nodes}=$node  envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
         mkdir -p ./${port}/data
     done
     tree
