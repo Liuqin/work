@@ -201,7 +201,7 @@ menu() {
     echo $myiplist
     echo '等待服务启动'
     sleep 1
-    redis-trib.rb
+    docker ps -a
     echo '等待服务启动'
     sleep 1
     echo '等待服务启动'
