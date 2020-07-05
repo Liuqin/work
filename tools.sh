@@ -108,7 +108,7 @@ menu() {
   4)
     # echo 安装redis 集群
     sleep 1
-     yum install gawk -y
+    yum install gawk -y
     read -p "内网地址,默认127.0.0.1:" local_ip
     echo 'local_ip:' $local_ip
     echo '内网地址:'$local_ip
@@ -172,16 +172,16 @@ menu() {
     cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
 
     for port in $(seq 6381 6386); do
-
-        kill -9 $(netstat -nlp | grep :1${port} | awk '{print $7}' | awk -F"/" '{ print $1 }')
-        mkdir -p ./${port}/conf &&
+      mkdir -p ./${port}/conf &&
         PORT=${port} ip=${local_ip} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
         mkdir -p ./${port}/data
     done
     tree
     # 创建6个redis容器
     for port in $(seq 6381 6386); do
-      docker run -d -it --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
+      #      docker run -d -it --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
+      docker run -d -it --privileged=true --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
+
     done
     echo '-------------------------------------------------------------'
     echo '              启动  redis 集群'
