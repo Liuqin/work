@@ -240,7 +240,7 @@ EOF
         docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis
         echo $port'开启了单机redis服务'
       else
-        docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis --requirepass "a123456"
+        docker run -it --restart=always --name liuqin-redis -p $port:6379 -d redis --requirepass $password
         echo $port'开启了单机redis服务'
       fi
     fi
