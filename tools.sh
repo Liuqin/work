@@ -115,16 +115,16 @@ menu() {
       echo "文件存在"
     else
       echo "文件不存在"
-        wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
-        sleep 1
-        echo 'redis-5.0.9.tar.gz 下载完成'
+      wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
+      sleep 1
+      echo 'redis-5.0.9.tar.gz 下载完成'
     fi
 
     tar -zxvf redis-5.0.9.tar.gz
     mv redis-5.0.9 /usr/local/redis
     cd /usr/local/redis/
     echo '试图卸载'
-    xargs rm < install_manifest.txt
+    xargs rm <install_manifest.txt
     echo '试图编译安装'
     make && make install
     sleep 1
@@ -195,7 +195,8 @@ EOF
       done
       echo "当前节点:"
       echo $myiplist
-      ruby /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
+      # ruby /usr/local/redis/src/redis-trib.rb create --replicas 1 $(echo ${myiplist})
+      sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
     fi
     menu
     ;;
