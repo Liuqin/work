@@ -108,9 +108,22 @@ menu() {
   4)
     # echo 安装redis 集群
     sleep 1
-    read -s -n1 -p "安装redis 集群(y/n)? ... "
+    read -p "内网地址:" local_ip
+    echo 'local_ip:' $local_ip
+    echo '内网地址:'$local_ip
+    if [ ! -n "$local_ip" ]; then
+      echo "使用默认127.0.0.1"
+      local_ip=127.0.0.1
+      echo $local_ip
+    else
+      echo $local_ip
+    fi
+    sleep 1
     yum -y install gcc
     yum -y install libc
+
+    clear
+    sleep 1
     if [ -f "/work/redis-3.2.0.tar.gz" ]; then
       echo "文件存在"
     else
@@ -129,79 +142,76 @@ menu() {
     make && make install
     sleep 1
     cd /work
-    if [ $REPLY == "y" ]; then
+    clear
 
-      echo '-------------------------------------------------------------'
-      echo '              安装  redis 集群'
-      echo '-------------------------------------------------------------'
-      yum -y install tree
+    echo '-------------------------------------------------------------'
+    echo '              安装  redis 集群'
+    echo '-------------------------------------------------------------'
+    yum -y install tree
 
-      # 在 /home 目录下创建redis-cluster 文件夹
-      rm -rf /home/redis-cluster
-      docker rm -f redis-6380
-      docker rm -f redis-6381
-      docker rm -f redis-6382
-      docker rm -f redis-6383
-      docker rm -f redis-6384
-      docker rm -f redis-6385
+    # 在 /home 目录下创建redis-cluster 文件夹
+    rm -rf /home/redis-cluster
+    docker rm -f redis-6381
+    docker rm -f redis-6382
+    docker rm -f redis-6383
+    docker rm -f redis-6384
+    docker rm -f redis-6385
+    docker rm -f redis-6386
+    mkdir -p /home/redis-cluster
+    cd /home/redis-cluster
+    # 清空 redis-cluster.conf文件中
+    cat /dev/null >redis-cluster.conf
+    rm -f redis-cluster.conf
+    yum -y install tree
+    # 在 /home 目录下创建redis-cluster 文件夹
+    mkdir -p /home/redis-cluster
+    cd /home/redis-cluster
+    rm -f redis-cluster.tmpl
+    cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
+    for port in $(seq 6381 6386); do
+      mkdir -p ./${port}/conf &&
+        PORT=${port} ip=${local_ip} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf &&
+        mkdir -p ./${port}/data
+    done
+    tree
+    # 创建6个redis容器
+    for port in $(seq 6381 6386); do
+      docker run -d -ti --restart=always -p ${port}:${port} -p 1${port}:1${port} -v /home/redis-cluster/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf -v /home/redis-cluster/${port}/data:/data --name redis-${port} --sysctl net.core.somaxconn=1024 redis redis-server /usr/local/etc/redis/redis.conf
+    done
+    echo '-------------------------------------------------------------'
+    echo '              启动  redis 集群'
+    echo '-------------------------------------------------------------'
+    echo '安装redis 中'
+    # 如果没有ruby，请执行 yum -y install ruby
+    yum -y install ruby
+    echo 'ruby重装redis'
+    gem install redis
+    echo ''
+    # 启动集群
+    myiplist=''
+    for port in $(seq 6381 6386); do
+      myiplist=${myiplist}' '"127.0.0.1:"${port}
+    done
+    echo "当前节点:"
+    echo $myiplist
+    echo '等待服务启动'
+    sleep 1
+    redis-trib.rb
+    echo '等待服务启动'
+    sleep 1
+    echo '等待服务启动'
+    sleep 1
+    echo '等待服务启动'
+    sleep 1
+    echo '等待服务启动'
+    ln -s /usr/local/redis/src/redis-trib.rb /usr/bin/redis-trib.rb
+    sleep 1
 
-      mkdir -p /home/redis-cluster
-      cd /home/redis-cluster
+    sleep 1
+    echo '如果下面命令失败，手动执行:'
+    echo ' redis-trib.rb create --replicas 1 ' $myiplist
+    redis-trib.rb create --replicas 1 $(echo $myiplist)
 
-      # 清空 redis-cluster.conf文件中
-      cat /dev/null >redis-cluster.conf
-      rm -f redis-cluster.conf
-
-      yum -y install tree
-      # 在 /home 目录下创建redis-cluster 文件夹
-      mkdir -p /home/redis-cluster
-      cd /home/redis-cluster
-      rm -f redis-cluster.tmpl
-      cp /work/redis-cluster.tmpl ./redis-cluster.tmpl
-
-      for port in $(seq 6380 6385); do
-        mkdir -p ./${port}/conf && PORT=${port} envsubst <./redis-cluster.tmpl >./${port}/conf/redis.conf && mkdir -p ./${port}/data
-      done
-      tree
-
-      #      docker network rm liuqin-redis-net
-      #      docker network create liuqin-redis-net
-
-      # 创建6个redis容器
-      for port in $(seq 6380 6385); do
-        docker run -d --net=host --name=redis-${port} --restart=always -v $(pwd)/${port}/conf/redis.conf:/usr/local/etc/redis/redis.conf
-        -d redis:latest redis-server /usr/local/etc/redis/redis.conf
-      done
-      echo '-------------------------------------------------------------'
-      echo '              启动  redis 集群'
-      echo '-------------------------------------------------------------'
-      echo '安装redis 中'
-      # 如果没有ruby，请执行 yum -y install ruby
-      yum -y install ruby
-      gem install redis
-
-      echo ''
-      # 启动集群
-      myiplist=''
-      for port in $(seq 6380 6385); do
-        myiplist=${myiplist}' '"127.0.0.1:"${port}
-      done
-      echo "当前节点:"
-      echo $myiplist
-      echo '等待服务启动'
-      sleep 1
-      echo '等待服务启动'
-      sleep 1
-      echo '等待服务启动'
-      sleep 1
-      echo '等待服务启动'
-      sleep 1
-      echo '等待服务启动'
-      ln -s /usr/local/redis/src/redis-trib.rb /usr/bin/redis-trib.rb
-      sleep 1
-      sudo redis-trib.rb create --replicas 1 $(echo ${myiplist})
-      # sudo redis-cli --cluster create $(echo ${myiplist}) --cluster-replicas 1
-    fi
     menu
     ;;
   5)
@@ -277,7 +287,6 @@ menu() {
     fi
 
     sleep 1
-
     read -s -n1 -p "是否重装Minio(y/n)? ... "
     echo $REPLY
     sleep 1

@@ -1,9 +1,14 @@
-port ${PORT}
-protected-mode no
-cluster-enabled yes
-cluster-config-file nodes.conf
-cluster-node-timeout 5000
-cluster-announce-ip 127.0.0.1
-cluster-announce-port ${PORT}
-cluster-announce-bus-port 1${PORT}
-appendonly yes
+port ${PORT} ##节点端口
+
+cluster-enabled yes ##cluster集群模式
+
+cluster-config-file nodes.conf ##集群配置名
+
+cluster-node-timeout 5000 ##超时时间
+
+cluster-announce-ip ${ip} ##实际为各节点网卡分配ip 
+
+cluster-announce-port ${PORT} ##节点映射端口
+
+cluster-announce-bus-port 1${PORT} ##节点总线端appendonly yes ##持久化模式 
+
