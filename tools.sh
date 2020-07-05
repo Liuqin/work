@@ -115,16 +115,15 @@ menu() {
       echo "文件存在"
     else
       echo "文件不存在"
-      wget https://mirrors.huaweicloud.com/redis/redis-5.0.9.tar.gz
+      wget https://mirrors.huaweicloud.com/redis/redis-3.2.0.tar.gz
       sleep 1
-      echo 'redis-5.0.9.tar.gz 下载完成'
+      echo 'redis-3.2.0.tar.gz 下载完成'
     fi
 
-    tar -zxvf redis-5.0.9.tar.gz
-    mv redis-5.0.9 /usr/local/redis
+    tar -zxvf redis-3.2.0.tar.gz
+    sudo rm -rf /usr/local/redis
+    mv redis-3.2.0 /usr/local/redis
     cd /usr/local/redis/
-    echo '试图卸载'
-    make uninstall
     echo ''
     echo '试图编译安装'
     make && make install
