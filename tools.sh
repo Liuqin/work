@@ -199,7 +199,8 @@ menu() {
     # 启动集群
     myiplist=''
     for port in $(seq 6381 6386); do
-      myiplist=${myiplist}' ' ${local_ip}":"${port}
+      node_s=' '${local_ip}':'${port}
+      myiplist=${myiplist}${node_s}
     done
     echo "当前节点:"
     echo $myiplist
