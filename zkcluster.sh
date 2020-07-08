@@ -10,7 +10,7 @@ echo 'local_ip:' $local_ip
 echo '服务器地址:'$local_ip
 if [ ! -n "$local_ip" ]; then
   echo "使用默认127.0.0.1"
-  local_ip=127.0.0.1
+  local_ip = 127.0.0.1
   echo $local_ip
 else
   echo $local_ip
