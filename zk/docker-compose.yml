@@ -2,6 +2,19 @@ version: '2'
 
 
 services:
+
+  zkui:
+    image: qnib/zkui
+    restart: always
+    container_name: zkui
+    ports:
+      - "9090:9090"
+    environment:
+      ZKUI_ZK_SERVER: zk1:2181,zk2:2182,zk3:2183
+    dns: 127.0.0.1
+    privileged: true
+
+
   zk1:
     image: zookeeper
     restart: always
@@ -49,13 +62,3 @@ services:
     dns: 127.0.0.1
     privileged: true
 
-  zkui:
-    image: qnib/zkui
-    restart: always
-    container_name: zkui
-    ports:
-      - "9090:9090"
-    environment:
-      ZKUI_ZK_SERVER: 127.0.0.1:2181 127.0.0.1:2182 127.0.0.1:2183
-    dns: 127.0.0.1
-    privileged: true
