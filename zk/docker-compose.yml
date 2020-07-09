@@ -19,8 +19,8 @@ services:
     ports:
       - "2182:2181"
     environment:
-     ZOO_MY_ID: 2
-     ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
 
   zk3:
     image: zookeeper
@@ -29,5 +29,30 @@ services:
     ports:
       - "2183:2181"
     environment:
-     ZOO_MY_ID: 3
-     ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
+
+
+  consul:
+    image: qnib/consul
+    restart: always
+    container_name: consul
+    ports:
+      - "8500:8500"
+    environment:
+      - DC_NAME=qnib
+      - RUN_SERVER=true
+      - BOOTSTRAP_CONSUL=true
+    dns: 127.0.0.1
+    privileged: true
+
+  zkui:
+    image: qnib/zkui
+    restart: always
+    container_name: zkui
+    ports:
+      - "9090:9090"
+    environment:
+      ZKUI_ZK_SERVER: server.1=zk1 server.2=zk2 server.3=zk3
+    dns: 127.0.0.1
+    privileged: true
