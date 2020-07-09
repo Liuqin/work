@@ -1,64 +1,48 @@
-version: '2'
-
-
+version: '3'
 services:
-
   zkui:
     image: qnib/zkui
-    restart: always
     container_name: zkui
-    ports:
-      - "9090:9090"
     environment:
-      ZKUI_ZK_SERVER: zk1:2181,zk2:2182,zk3:2183
-    dns: 127.0.0.1
-    privileged: true
-
-
+      ZKUI_ZK_SERVER: ${ZOOKEEPER_SERVERS}
+    ports:
+      - 9090:9090
+    volumes:
+      - ./zkui/config.cfg:/opt/zkui/config.cfg
   zk1:
-    image: zookeeper
+    image: 'zookeeper'
     restart: always
-    dns: 127.0.0.1
     container_name: zk1
     ports:
-      - "2181:2181"
+      - '2181:2181'
+    volumes:
+      - ./data/zookeeper1:/data
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
-
+      ZOO_SERVERS: ${ZOO_SERVERS}
+      ZOO_4LW_COMMANDS_WHITELIST: '*'
   zk2:
-    image: zookeeper
+    image: 'zookeeper'
     restart: always
-    dns: 127.0.0.1
     container_name: zk2
     ports:
-      - "2182:2181"
+      - '2182:2181'
+    volumes:
+      - ./data/zookeeper2:/data
     environment:
       ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
-
+      ZOO_SERVERS: ${ZOO_SERVERS}
+      ZOO_4LW_COMMANDS_WHITELIST: '*'
   zk3:
-    image: zookeeper
+    image: 'zookeeper'
     restart: always
-    dns: 127.0.0.1
     container_name: zk3
     ports:
-      - "2183:2181"
+      - '2183:2181'
+    volumes:
+      - ./data/zookeeper3:/data
     environment:
       ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1=zk1:2888:3888 server.2=zk2:2888:3888 server.3=zk3:2888:3888
-
-
-  consul:
-    image: qnib/consul
-    restart: always
-    container_name: consul
-    ports:
-      - "8500:8500"
-    environment:
-      - DC_NAME=qnib
-      - RUN_SERVER=true
-      - BOOTSTRAP_CONSUL=true
-    dns: 127.0.0.1
-    privileged: true
+      ZOO_SERVERS: ${ZOO_SERVERS}
+      ZOO_4LW_COMMANDS_WHITELIST: '*'
 
