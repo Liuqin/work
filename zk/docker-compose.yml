@@ -53,6 +53,6 @@ services:
     ports:
       - "9090:9090"
     environment:
-      ZKUI_ZK_SERVER: server.1=zk1 server.2=zk2 server.3=zk3
+      ZKUI_ZK_SERVER: zk1 zk2 zk3
     dns: 127.0.0.1
     privileged: true
