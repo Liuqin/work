@@ -5,6 +5,7 @@ services:
   zk1:
     image: zookeeper
     restart: always
+    dns: 127.0.0.1
     container_name: zk1
     ports:
       - "2181:2181"
@@ -15,6 +16,7 @@ services:
   zk2:
     image: zookeeper
     restart: always
+    dns: 127.0.0.1
     container_name: zk2
     ports:
       - "2182:2181"
@@ -25,6 +27,7 @@ services:
   zk3:
     image: zookeeper
     restart: always
+    dns: 127.0.0.1
     container_name: zk3
     ports:
       - "2183:2181"
@@ -53,6 +56,6 @@ services:
     ports:
       - "9090:9090"
     environment:
-      ZKUI_ZK_SERVER: zk1 zk2 zk3
+      ZKUI_ZK_SERVER: 127.0.0.1:2181 127.0.0.1:2182 127.0.0.1:2183
     dns: 127.0.0.1
     privileged: true
