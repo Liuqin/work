@@ -12,7 +12,7 @@ menu() {
   echo "(4) 安装redis集群"
   echo "(5) 安装ruby"
   echo "(6) 部分单机服务"
-   echo "(7) gitea服务"
+  echo "(7) gitea服务"
   echo "(9) Exit Menu"
   echo "================================"
   read input
@@ -83,7 +83,7 @@ menu() {
     sh others.sh
     menu
     ;;
-   7)
+  7)
     chmod +x gitea.sh
     sh gitea.sh
     menu

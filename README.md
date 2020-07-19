@@ -16,7 +16,7 @@
     sh tools.sh
 
 ###
-菜单.PNG
+![Image text](./images/菜单.png)
 ###
 一般情况下 建议优先安装 ruby 服务，由于有个github 文件有点大，所以，第一个ruby 相对慢一点
 
@@ -25,7 +25,7 @@
 
 后面安装 BT，你就有界面了
 
-image
+![Image text](./images/bt.png)
 ###
 BT 我就不讲了，你们可以进去 设置自己的端口 和服务
 
@@ -35,7 +35,7 @@ BT 我就不讲了，你们可以进去 设置自己的端口 和服务
 ###
 我是单机集群6个本地节点，选择4 ，多机器集群的孩子 自己改一下脚本设置
 
-image
+![Image text](./images/单机集群.png)
 ###
 系统让你填写 ip ，建议填写 外网ip 或者 内置ip
 
@@ -52,7 +52,7 @@ image
 
 ###只有出错才执行 提示的命令，没有出错不用动
 
-image
+![Image text](./images/yes.png)
 ###
 
 输入yes 同意
@@ -60,5 +60,5 @@ image
 image
 ###最后看到
 
-image
+![Image text](./images/安装成功.png)
 

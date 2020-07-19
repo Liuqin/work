@@ -2,9 +2,13 @@
 
 sleep 1
 yum install gawk -y
-read -p "内网地址,默认127.0.0.1:" local_ip
+echo '非常不建议使用127.0.0.1'
+echo '建议你使用服务器内网地址，或者服务器外网地址'
+sleep 1
+
+read -p "外网地址,默认127.0.0.1:" local_ip
 echo 'local_ip:' $local_ip
-echo '内网地址:'$local_ip
+echo '外网地址:'$local_ip
 if [ ! -n "$local_ip" ]; then
   echo "使用默认127.0.0.1"
   local_ip=127.0.0.1
