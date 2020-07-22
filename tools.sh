@@ -26,6 +26,9 @@ menu() {
     sleep 1
     read -s -n1 -p "更新系统?(y/n)?:.... "
     if [ $REPLY == "y" ]; then
+      yum install -y java
+      chmod +x mvn_install.sh
+      sh mvn_install.sh
       yum update -y
     fi
     menu
