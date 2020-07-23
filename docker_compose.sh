@@ -13,6 +13,6 @@ python3 -m pip install --upgrade pip
 pip3 uninstall docker-compose
 pip3 install docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-ln -s /usr/bin/docker-compose /usr/local/bin/docker-compose
+ln -s  /usr/local/bin/docker-compose /usr/bin/docker-compose
 echo '查看docker-compose版本'
 docker-compose --version
