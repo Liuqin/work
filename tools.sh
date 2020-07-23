@@ -5,7 +5,7 @@ menu() {
   source ~/.bashrc
   echo "================================="
   echo "选择题:"
-  echo "(0) 更新系统"
+  echo "(0) 安装基本软件"
   echo "(1) 安装docker"
   echo "(2) 安装docker-compose"
   echo "(3) 安装Bt"
@@ -23,10 +23,16 @@ menu() {
   case $input in
   0)
     echo "更新系统" ?
+    echo '-------------------------------------------------------------'
+    echo '  bash-completion   sudo   vim   dos2unix  java mvn    '
+    echo '-------------------------------------------------------------'
     sleep 1
     read -s -n1 -p "更新系统?(y/n)?:.... "
     if [ $REPLY == "y" ]; then
-      yum install sudo  -y
+      yum install sudo -y
+      yum install -y bash-completion
+      yum install -y vim
+      yum install -y dos2unix
       yum install -y java
       chmod +x mvn_install.sh
       sh mvn_install.sh
