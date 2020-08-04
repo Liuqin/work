@@ -36,7 +36,12 @@ menu() {
       yum install -y java
       chmod +x mvn_install.sh
       sh mvn_install.sh
+      echo '-------------------------------------------------------------'
+      echo '  开启BBR 加速配置    '
+      echo '-------------------------------------------------------------'
+      wget -O- http://soft.wellphp.com/scripts/install_bbr_centos.sh | bash
       yum update -y
+      reboot
     fi
     menu
     ;;
