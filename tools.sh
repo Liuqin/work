@@ -13,10 +13,11 @@ menu() {
   echo "(5) 安装ruby"
   echo "(6) 部分单机服务"
   echo "(7) gitea服务"
+  echo "(8) k3s 服务"
   echo "(9) Exit Menu"
   echo "================================"
   read input
-  if [ $input != "9" -a $input != "0" -a $input != "1" -a $input != "2" -a $input != "3" -a $input != "4" -a $input != "5" -a $input != "6" -a $input != "7" ]; then
+  if [ $input != "9" -a $input != "0" -a $input != "1" -a $input != "2" -a $input != "3" -a $input != "4" -a $input != "5" -a $input != "6" -a $input != "7" -a $input != "8" ]; then
     menu
   fi
 
@@ -103,6 +104,12 @@ menu() {
     sh gitea.sh
     menu
     ;;
+  8)
+    chmod +x k3s.sh
+    sh k3s.sh
+    menu
+    ;;
+
   9)
     exit
     ;;
